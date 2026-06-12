@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Titanic Survival Prediction Project</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    scroll-behavior:smooth;
+}
+
+nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    background:#1e293b;
+    padding:15px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:1000;
+    box-shadow:0 2px 10px rgba(0,0,0,.3);
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    color:#38bdf8;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+nav ul li a{
+    text-decoration:none;
+    color:white;
+    transition:.3s;
+}
+
+nav ul li a:hover{
+    color:#38bdf8;
+}
+
+section{
+    padding:100px 10%;
+}
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:60px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    max-width:800px;
+    line-height:1.8;
+    color:#cbd5e1;
+}
+
+.btn{
+    margin-top:30px;
+    display:inline-block;
+    padding:12px 25px;
+    background:#38bdf8;
+    color:black;
+    text-decoration:none;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:40px;
+    color:#38bdf8;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+table th,table td{
+    border:1px solid #334155;
+    padding:12px;
+    text-align:center;
+}
+
+table th{
+    background:#38bdf8;
+    color:black;
+}
+
+.steps{
+    display:grid;
+    gap:20px;
+}
+
+.step{
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+}
+
+.streamlit-box{
+    background:#1e293b;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.footer{
+    text-align:center;
+    padding:30px;
+    background:#1e293b;
+}
+
+.highlight{
+    color:#38bdf8;
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">🚢 Titanic ML</div>
+
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#dataset">Dataset</a></li>
+        <li><a href="#steps">Project Steps</a></li>
+        <li><a href="#app">Streamlit App</a></li>
+    </ul>
+</nav>
+
+<section class="hero" id="home">
+
+    <h1>Titanic Survival Prediction System</h1>
+
+    <p>
+        A Machine Learning project developed to predict whether a passenger
+        would survive the Titanic disaster based on passenger class, gender,
+        age group, fare category, embarkation point and family information.
+        The project includes data cleaning, feature engineering, model training,
+        evaluation and deployment using Streamlit.
+    </p>
+
+    <a href="#dataset" class="btn">Explore Project</a>
+
+</section>
+
+<section id="dataset">
+
+    <h2 class="title">📊 About Dataset</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Records</h3>
+            <p>891 Passengers</p>
+        </div>
+
+        <div class="card">
+            <h3>Target Variable</h3>
+            <p>Survived</p>
+        </div>
+
+        <div class="card">
+            <h3>Source</h3>
+            <p>Titanic Dataset</p>
+        </div>
+
+    </div>
+
+    <h3 style="margin-top:40px;">Final Features Used</h3>
+
+    <table>
+
+        <tr>
+            <th>Feature</th>
+            <th>Description</th>
+        </tr>
+
+        <tr>
+            <td>Pclass</td>
+            <td>Passenger Class</td>
+        </tr>
+
+        <tr>
+            <td>Gender</td>
+            <td>Male / Female</td>
+        </tr>
+
+        <tr>
+            <td>Age Group</td>
+            <td>Kids, Teens, Adults, Seniors</td>
+        </tr>
+
+        <tr>
+            <td>Family Members</td>
+            <td>Family Onboard</td>
+        </tr>
+
+        <tr>
+            <td>Fare</td>
+            <td>Ticket Fare</td>
+        </tr>
+
+        <tr>
+            <td>Embarked</td>
+            <td>Boarding Port</td>
+        </tr>
+
+    </table>
+
+</section>
+
+<section id="steps">
+
+    <h2 class="title">⚙️ Project Workflow</h2>
+
+    <div class="steps">
+
+        <div class="step">
+            <h3>1. Data Collection</h3>
+            <p>Collected Titanic passenger dataset.</p>
+        </div>
+
+        <div class="step">
+            <h3>2. Data Cleaning</h3>
+            <p>Removed unnecessary columns, handled missing values and cleaned records.</p>
+        </div>
+
+        <div class="step">
+            <h3>3. Feature Engineering</h3>
+            <p>Created Age Groups and Family Members features.</p>
+        </div>
+
+        <div class="step">
+            <h3>4. Exploratory Data Analysis</h3>
+            <p>Analyzed survival trends based on gender, class and embarkation port.</p>
+        </div>
+
+        <div class="step">
+            <h3>5. Machine Learning</h3>
+            <p>Trained classification model for survival prediction.</p>
+        </div>
+
+        <div class="step">
+            <h3>6. Deployment</h3>
+            <p>Deployed the final model using Streamlit.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section id="app">
+
+    <h2 class="title">🚀 Streamlit Application</h2>
+
+    <div class="streamlit-box">
+
+        <h3>Features</h3>
+
+        <br>
+
+        <p>✔ Passenger Class Selection</p>
+        <p>✔ Gender Selection</p>
+        <p>✔ Embarked Selection</p>
+        <p>✔ Age Category Selection</p>
+        <p>✔ Fare Category Selection</p>
+        <p>✔ Family Onboard Information</p>
+
+        <br>
+
+        <h3>Prediction Flow</h3>
+
+        <br>
+
+        <p>
+            User Input ➜ Data Encoding ➜ ML Model ➜ Prediction ➜ Result
+        </p>
+
+        <br>
+
+        <h3>Technology Stack</h3>
+
+        <br>
+
+        <p class="highlight">
+            Python • Pandas • NumPy • Scikit-Learn • Streamlit • Machine Learning
+        </p>
+
+    </div>
+
+</section>
+
+<div class="footer">
+
+    <h3>Developed By Gurvinder Kaur</h3>
+
+    <p>Data Analyst </p>
+
+</div>
+
+</body>
+</html>
