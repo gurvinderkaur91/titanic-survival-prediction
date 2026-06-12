@@ -114,9 +114,6 @@ with reset_col:
         st.session_state.clear()
         st.rerun()
 st.divider()   
-# ----------------------------input summary----------------------------------------------------------
-st.subheader("🧾 Input Summary")
-# st.write(inputdf)
 
 # ----------------------------input summary----------------------------------------------------------
 st.subheader("🧾 Input Summary")
