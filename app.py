@@ -18,7 +18,9 @@ st.divider()
 # ------------------------------------------------------------------------------------------------
 #sidebar
 st.sidebar.header("🎯 Passengers Details")
-Pclass=st.sidebar.radio("Passsanger Class",[1,2,3])
+Pclass=st.sidebar.radio("Passsenger Class",["First Class","Second Class","Third Class"])
+class_map={'First Class':0,'Second Class':1,'Third Class':2}
+Pclass=class_map[Pclass]
 
 Sex= st.sidebar.radio("Sex",["Male","Female"])
 Sex=1 if Sex=="Male" else 0
@@ -67,30 +69,58 @@ inputdf=pd.DataFrame({
 inputdf=inputdf.reindex(columns=train_columns,fill_value=0)
 # this ensures same columns,Same order and no missing Values
 # ------------------------------------------------------------------------------------
-
-
+# Dataset Insights
 # Dataset Insights
 st.subheader("📊 Dataset Insights")
 
-col1,col2,col3=st.columns(3)
+col1, col2, col3 = st.columns(3)
 
+# Passenger Class
 with col1:
-    st.metric("Total Passangers",len(data))
-    st.bar_chart(data['Pclass'].value_counts())
+    st.metric("Total Passengers", len(data))
 
+    pclass_counts = data['Pclass'].value_counts().sort_index()
+    pclass_counts.index = [
+        "First Class",
+        "Second Class",
+        "Third Class"
+    ]
+
+    st.bar_chart(pclass_counts)
+
+# Gender
 with col2:
-    male_count=int((data['Sex']==1).sum())
-    female_count=int((data['Sex']==0).sum())
-    g1,g2=st.columns(2)
-    with g1:
-        st.metric("Female",female_count)
-    with g2:
-        st.metric("Male",male_count)
-    st.bar_chart(data['Sex'].value_counts())
+    male_count = int((data['Sex'] == 1).sum())
+    female_count = int((data['Sex'] == 0).sum())
 
+    g1, g2 = st.columns(2)
+
+    with g1:
+        st.metric("Female", female_count)
+
+    with g2:
+        st.metric("Male", male_count)
+
+    gender_counts = data['Sex'].value_counts().sort_index()
+    gender_counts.index = [
+        "Female",
+        "Male"
+    ]
+
+    st.bar_chart(gender_counts)
+
+# Embarked
 with col3:
-    st.metric("Unique Embarked",data['Embarked'].nunique())
-    st.bar_chart(data['Embarked'].value_counts())
+    st.metric("Unique Embarked", data['Embarked'].nunique())
+
+    embarked_counts = data['Embarked'].value_counts().sort_index()
+    embarked_counts.index = [
+        "Cherbourg",
+        "Queenstown",
+        "Southampton"
+    ]
+
+    st.bar_chart(embarked_counts)
 
 st.divider()
 
