@@ -149,7 +149,7 @@ st.divider()
 st.subheader("🧾 Input Summary")
 
 summary_df = pd.DataFrame({
-    'Passenger Class':[Pclass],
+    'Passenger Class':['First Class' if Embarked==0 else 'Second Class' if Embarked==1 else 'Third Class'],
     'Sex':['Male' if Sex==1 else 'Female'],
     'Embarked':['Cherbourge' if Embarked==0 else 'Queenstown' if Embarked==1 else 'Southampton'],
     'Age Category':['Adults' if Age_cat==0 else 'Senior Citizens' if Age_cat==1 else 'Teens' if Age_cat==2 else 'Youth'],
