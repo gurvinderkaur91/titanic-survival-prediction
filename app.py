@@ -2,43 +2,12 @@
 import streamlit as st 
 import pandas as pd
 from joblib import load
-import psycopg2
 #joblib is used to save and load ml models 
 
 # load model  and columns
 model=load('tree.joblib')
 train_columns =load('columns.joblib')
 data=load('data.joblib') #this is x
-
-# Database
-
-conn = psycopg2.connect(
-    host="localhost",
-    database="Titanic_db",
-    user="postgres",
-    password="gkaur04",
-    port="5432"
-)
-
-cursor = conn.cursor()
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS predictions (
-    id SERIAL PRIMARY KEY,
-    pclass varchar(50),
-    gender VARCHAR(10),
-    age_category varchar(30),
-    fare_category varchar(30),
-    embarked VARCHAR(50),
-    family_onboard varchar(50),
-    prediction VARCHAR(20)
-)
-""")
-
-conn.commit()
-
-
-
 
 # Page Setting 
 st.set_page_config(page_title="Titanic Predictions Interface",layout="wide")
@@ -166,56 +135,12 @@ pred_prob_col,reset_col=st.columns(2)
 with pred_prob_col:
     if st.button("Predict"):
         result=model.predict(inputdf)
-        prediction=int(result[0])
-        
-
         prob=model.predict_proba(inputdf)
     
         if result[0]==1:
             st.success("Survived ✅ ")
         else:
             st.error("Did Not Survived ❌")
-
-        
-        Pclass_db = (
-    'First Class' if Pclass == 0
-    else 'Second Class' if Pclass == 1
-    else 'Third Class'
-       )
-
-        sex_db = 'Male' if Sex == 1 else 'Female'
-
-        embarked_db = (
-                'Cherbourg' if Embarked == 0
-              else 'Queenstown' if Embarked == 1
-                 else 'Southampton'
-              )
-
-        age_category_db = (
-    'Adults' if Age_cat == 0
-    else 'Senior Citizens' if Age_cat == 1
-    else 'Teens' if Age_cat == 2
-    else 'Youth'
-)
-
-        fare_category_db = (
-    'Expensive' if Fare_cat == 0
-    else 'High' if Fare_cat == 1
-    else 'Low' if Fare_cat == 2
-    else 'Medium'
-)
-
-        family_db = 'Yes' if Family == 1 else 'No'
-
-        cursor.execute("""
-        INSERT INTO predictions
-        (pclass, gender, age_category, fare_category, embarked,family_onboard, prediction)
-         VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (Pclass_db, sex_db, age_category_db, fare_category_db, embarked_db,family_db, prediction))
-
-        conn.commit()
-
-        st.success(f"Prediction: {result}")
 
         st.session_state['prob']=prob
         st.metric("Survival Probability: ",f"{round(st.session_state['prob'][0][1],2)*100}%")
