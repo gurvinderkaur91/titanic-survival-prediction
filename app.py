@@ -2,12 +2,43 @@
 import streamlit as st 
 import pandas as pd
 from joblib import load
+import psycopg2
 #joblib is used to save and load ml models 
 
 # load model  and columns
 model=load('tree.joblib')
 train_columns =load('columns.joblib')
 data=load('data.joblib') #this is x
+
+# Database
+
+conn = psycopg2.connect(
+    host="localhost",
+    database="Titanic_db",
+    user="postgres",
+    password="gkaur04",
+    port="5432"
+)
+
+cursor = conn.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS predictions (
+    id SERIAL PRIMARY KEY,
+    pclass varchar(50),
+    gender VARCHAR(10),
+    age_category varchar(30),
+    fare_category varchar(30),
+    embarked VARCHAR(50),
+    family_onboard varchar(50),
+    prediction VARCHAR(20)
+)
+""")
+
+conn.commit()
+
+
+
 
 # Page Setting 
 st.set_page_config(page_title="Titanic Predictions Interface",layout="wide")
@@ -17,10 +48,13 @@ st.markdown("### *Explore passenger data + Predict Survival*")
 st.divider()
 # ------------------------------------------------------------------------------------------------
 #sidebar
+
+
 st.sidebar.header("🎯 Passengers Details")
 Pclass=st.sidebar.radio("Passsenger Class",["First Class","Second Class","Third Class"])
 class_map={'First Class':0,'Second Class':1,'Third Class':2}
 Pclass=class_map[Pclass]
+
 
 Sex= st.sidebar.radio("Sex",["Male","Female"])
 Sex=1 if Sex=="Male" else 0
@@ -29,19 +63,15 @@ Embarked=st.sidebar.selectbox("Embarked",['Cherbourge','Queenstown','Southampton
 embarked_map={'Cherbourge':0,'Queenstown':1,'Southampton':2}
 Embarked=embarked_map[Embarked]
 
-# Age_cat=st.sidebar.slider("Age Category",0,3,1)
 
 Age_cat=st.sidebar.selectbox("Age Category",['Adults','Senior Citizens','Teens','Youth'])
 age_map={'Adults':0,'Senior Citizens':1,'Teens':2,'Youth':3}
 Age_cat=age_map[Age_cat]
 
 
-# Fare_cat=st.sidebar.slider("Fare Category",0,3,1)
-
 Fare_cat=st.sidebar.selectbox("Fare Category",['Low','Medium','High','Expensive'])
 fare_map={'Expensive':0,'High':1,'Low':2,'Medium':3}
 Fare_cat=fare_map[Fare_cat]
-
 
 
 Family=st.sidebar.radio("Family Onboards?",["No","Yes"])
@@ -69,7 +99,9 @@ inputdf=pd.DataFrame({
 inputdf=inputdf.reindex(columns=train_columns,fill_value=0)
 # this ensures same columns,Same order and no missing Values
 # ------------------------------------------------------------------------------------
-# Dataset Insights
+
+
+
 # Dataset Insights
 st.subheader("📊 Dataset Insights")
 
@@ -122,6 +154,10 @@ with col3:
 
     st.bar_chart(embarked_counts)
 
+
+
+
+
 st.divider()
 
 # --------------------------------------------------------------------------------
@@ -130,12 +166,56 @@ pred_prob_col,reset_col=st.columns(2)
 with pred_prob_col:
     if st.button("Predict"):
         result=model.predict(inputdf)
+        prediction=int(result[0])
+        
+
         prob=model.predict_proba(inputdf)
     
         if result[0]==1:
             st.success("Survived ✅ ")
         else:
             st.error("Did Not Survived ❌")
+
+        
+        Pclass_db = (
+    'First Class' if Pclass == 0
+    else 'Second Class' if Pclass == 1
+    else 'Third Class'
+       )
+
+        sex_db = 'Male' if Sex == 1 else 'Female'
+
+        embarked_db = (
+                'Cherbourg' if Embarked == 0
+              else 'Queenstown' if Embarked == 1
+                 else 'Southampton'
+              )
+
+        age_category_db = (
+    'Adults' if Age_cat == 0
+    else 'Senior Citizens' if Age_cat == 1
+    else 'Teens' if Age_cat == 2
+    else 'Youth'
+)
+
+        fare_category_db = (
+    'Expensive' if Fare_cat == 0
+    else 'High' if Fare_cat == 1
+    else 'Low' if Fare_cat == 2
+    else 'Medium'
+)
+
+        family_db = 'Yes' if Family == 1 else 'No'
+
+        cursor.execute("""
+        INSERT INTO predictions
+        (pclass, gender, age_category, fare_category, embarked,family_onboard, prediction)
+         VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (Pclass_db, sex_db, age_category_db, fare_category_db, embarked_db,family_db, prediction))
+
+        conn.commit()
+
+        st.success(f"Prediction: {result}")
 
         st.session_state['prob']=prob
         st.metric("Survival Probability: ",f"{round(st.session_state['prob'][0][1],2)*100}%")
