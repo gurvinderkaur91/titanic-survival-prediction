@@ -13,11 +13,13 @@
     box-sizing:border-box;
     font-family:Segoe UI, sans-serif;
 }
+html{
+    scroll-behavior:smooth;
+}
 
 body{
     background:#0f172a;
     color:white;
-    scroll-behavior:smooth;
 }
 
 nav{
@@ -158,18 +160,125 @@ table th{
     color:#38bdf8;
 }
 
+.hero-buttons{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+    margin-top:35px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:14px 28px;
+    background:#38bdf8;
+    color:black;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 20px rgba(56,189,248,0.4);
+}
+/* Dashboard Section */
+
+.dashboard-subtitle{
+    text-align:center;
+    color:#94a3b8;
+    margin-bottom:30px;
+}
+
+.dashboard-container{
+
+    margin-top:20px;
+    padding:12px;
+
+    border:3px dashed #38bdf8;
+
+    border-radius:20px;
+
+    background:#1e293b;
+
+    box-shadow:
+    0 0 15px rgba(56,189,248,.30),
+    0 0 35px rgba(56,189,248,.20);
+
+    transition:0.3s;
+
+    overflow:hidden;
+}
+
+.dashboard-container:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+    0 0 25px rgba(56,189,248,.50),
+    0 0 45px rgba(56,189,248,.30);
+}
+
+.dashboard-img{
+
+    width:100%;
+    display:block;
+
+    border-radius:12px;
+}
+
+.dashboard-btns{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    margin-top:30px;
+
+    flex-wrap:wrap;
+}
+
+.dashboard-btn{
+
+    background:#38bdf8;
+
+    color:#000;
+
+    text-decoration:none;
+
+    padding:14px 28px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    transition:0.3s;
+}
+
+.dashboard-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 0 15px rgba(56,189,248,.50);
+}
 </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo">🚢 Titanic ML</div>
+    <div class="logo">🚢 Titanic Survival Prediction</div>
 
     <ul>
         <li><a href="#home">Home</a></li>
         <li><a href="#dataset">Dataset</a></li>
         <li><a href="#steps">Project Steps</a></li>
         <li><a href="#app">Streamlit App</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+
     </ul>
 </nav>
 
@@ -185,7 +294,25 @@ table th{
         evaluation and deployment using Streamlit.
     </p>
 
-    <a href="#dataset" class="btn">Explore Project</a>
+    <div class="hero-buttons">
+
+    <a href="#dataset" class="btn">
+        📊 Explore Project
+    </a>
+
+    <a href="https://titanic-survival-prediction-91.streamlit.app/" 
+       target="_blank"
+       class="btn">
+       🚀 Live Demo
+    </a>
+
+    <a href="https://github.com/gurvinderkaur91/titanic-survival-prediction"
+       target="_blank"
+       class="btn">
+       💻 GitHub Repo
+    </a>
+
+</div>
 
 </section>
 
@@ -333,6 +460,26 @@ table th{
         </p>
 
     </div>
+
+</section>
+
+<section id="dashboard">
+
+    <h2 class="title">📈 Dashboard Preview</h2>
+
+    <p class="dashboard-subtitle">
+        Excel Dashboard Created During Data Analysis Phase
+    </p>
+
+    <div class="dashboard-container">
+
+        <img src="dashboard.png"
+             alt="Titanic Dashboard"
+             class="dashboard-img">
+
+    </div>
+
+    
 
 </section>
 
